@@ -26,13 +26,19 @@ public class UserService {
     public User registerUser(UserRegisterDto userRegisterDto) {
         if (userRepository.existsByEmail(userRegisterDto.getEmail()))
             return null;
-        String encryptedPassword = passwordEncoder.encode(userRegisterDto.getUserPassword());
-        User newUser = new User(userRegisterDto.getEmail(), userRegisterDto.getUserName(), encryptedPassword);
+        String encryptedPassword = passwordEncoder.encode(userRegisterDto.getPassword());
+        User newUser = new User(
+                    userRegisterDto.getFirstName(),
+                    userRegisterDto.getLastName(),
+                    userRegisterDto.getBirthdate(),
+                    userRegisterDto.getEmail(),
+                    userRegisterDto.getPassword()
+                );
         return userRepository.save(newUser);
     }
 
     public boolean verifyPassword(User user, String password) {
-        return passwordEncoder.matches(password, user.getUserPassword());
+        return passwordEncoder.matches(password, user.getPassword());
     }
 
     public Optional<User> findUserById(UUID userId) {
