@@ -42,7 +42,7 @@ public class UserService {
                     userRegisterDto.getLastName(),
                     userRegisterDto.getBirthdate(),
                     userRegisterDto.getEmail(),
-                    userRegisterDto.getPassword(),
+                    encryptedPassword,
                     bytesAvatar
                 );
         return userRepository.save(newUser);
