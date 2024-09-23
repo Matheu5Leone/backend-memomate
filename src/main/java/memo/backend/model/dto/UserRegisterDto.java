@@ -24,7 +24,6 @@ public class UserRegisterDto {
     private String lastName;
 
     @Past(message = "Birthdate needs to be in past time")
-    @NotBlank(message = "Birthdate is required")
     private Date birthdate;
 
     @Email(message = "The email must be valid")

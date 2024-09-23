@@ -3,10 +3,12 @@ package memo.backend.service;
 import memo.backend.model.User;
 import memo.backend.model.dto.UserRegisterDto;
 import memo.backend.repository.UserRepository;
+import memo.backend.util.ProfilePictureGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -27,12 +29,21 @@ public class UserService {
         if (userRepository.existsByEmail(userRegisterDto.getEmail()))
             return null;
         String encryptedPassword = passwordEncoder.encode(userRegisterDto.getPassword());
+
+        // AVATAR GENERATOR BLOCK
+        String fullName = userRegisterDto.getFirstName() + userRegisterDto.getLastName();
+        String initials = ProfilePictureGenerator.generateLetters(fullName);
+        BufferedImage bufferedImage = ProfilePictureGenerator.generateProfilePicture(initials);
+        byte[] bytesAvatar = ProfilePictureGenerator.convertBufferedImageToByteArray(bufferedImage);
+        //
+
         User newUser = new User(
                     userRegisterDto.getFirstName(),
                     userRegisterDto.getLastName(),
                     userRegisterDto.getBirthdate(),
                     userRegisterDto.getEmail(),
-                    userRegisterDto.getPassword()
+                    userRegisterDto.getPassword(),
+                    bytesAvatar
                 );
         return userRepository.save(newUser);
     }

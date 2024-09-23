@@ -6,9 +6,12 @@ import memo.backend.model.dto.UserLoginDto;
 import memo.backend.model.dto.UserRegisterDto;
 import memo.backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -47,5 +50,15 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         userService.deleteUser(optionalUser.get());
         return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @GetMapping("/avatar/{userId}")
+    public ResponseEntity<byte[]>  getAvatar(@PathVariable UUID userId){
+        Optional<User> optionalUser = userService.findUserById(userId);
+        if (optionalUser.isEmpty())
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.IMAGE_PNG);
+        return ResponseEntity.status(HttpStatus.OK).headers(headers).body(optionalUser.get().getAvatar());
     }
 }
