@@ -24,6 +24,9 @@ public class UserService {
     public User findUserByEmail(String email) {
         return userRepository.findByEmail(email);
     }
+    public Optional<User> findUserById(UUID userId) {
+        return userRepository.findById(userId);
+    }
 
     public User registerUser(UserRegisterDto userRegisterDto) {
         if (userRepository.existsByEmail(userRegisterDto.getEmail()))
@@ -50,10 +53,6 @@ public class UserService {
 
     public boolean verifyPassword(User user, String password) {
         return passwordEncoder.matches(password, user.getPassword());
-    }
-
-    public Optional<User> findUserById(UUID userId) {
-        return userRepository.findById(userId);
     }
 
     public void deleteUser(User user) {
