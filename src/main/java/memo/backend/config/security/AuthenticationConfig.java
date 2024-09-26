@@ -3,6 +3,7 @@ package memo.backend.config.security;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -25,7 +26,8 @@ public class AuthenticationConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .anyRequest().authenticated()) // Requer autenticação para todos os endpoints
                 .httpBasic(withDefaults()) // Habilita autenticação básica
-                .csrf(csrf -> csrf.disable()); // Desabilita CSRF para todos os endpoints
+                .csrf(AbstractHttpConfigurer::disable) // Desabilita CSRF para todos os endpoints
+                .cors(AbstractHttpConfigurer::disable);
         return http.build();
     }
 
