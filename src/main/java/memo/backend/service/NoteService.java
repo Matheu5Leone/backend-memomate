@@ -1,6 +1,8 @@
 package memo.backend.service;
 
+import jakarta.transaction.Transactional;
 import memo.backend.model.Note;
+import memo.backend.model.User;
 import memo.backend.repository.NoteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -50,6 +52,20 @@ public class NoteService {
     }
 
     public List<Note> listAllByUser(UUID userId) {
-        return noteRepository.findAllByUserId(userId);
+        return noteRepository.findAllByUser(userId);
+    }
+
+    @Transactional
+    public void deleteOrUnlinkNotesFromUser(User user, List<UUID> notesIds) {
+        List<Note> notes = noteRepository.findAllById(notesIds);
+
+        for (Note note : notes) {
+            if (note.getOwner().equals(user)) {
+                noteRepository.delete(note);
+            } else {
+                note.getUsers().remove(user);
+                noteRepository.save(note);
+            }
+        }
     }
 }

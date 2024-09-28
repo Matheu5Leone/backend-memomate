@@ -28,8 +28,11 @@ public class NoteController {
         if (optionalUser.isEmpty())
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 
-        Note newNote = new Note(optionalUser.get());
+        User owner = optionalUser.get();
+        Note newNote = new Note(owner);
         Note createdNote = noteService.createNote(newNote);
+        owner.getNotes().add(createdNote);
+        userService.saveUser(owner);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdNote);
     }
 
@@ -59,6 +62,16 @@ public class NoteController {
 
         noteService.deleteNote(noteId);
         return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @DeleteMapping("/all/{userId}")
+    public ResponseEntity<Void> deleteNotesFromUser(@PathVariable UUID userId, @RequestBody List<UUID> notesIds){
+        Optional<User> optionalUser = userService.findUserById(userId);
+        if (optionalUser.isEmpty())
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+
+        noteService.deleteOrUnlinkNotesFromUser(optionalUser.get(), notesIds);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @GetMapping("/{userId}")

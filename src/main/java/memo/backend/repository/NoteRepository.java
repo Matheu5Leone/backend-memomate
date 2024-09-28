@@ -12,6 +12,6 @@ import java.util.UUID;
 @Repository
 public interface NoteRepository extends JpaRepository<Note, UUID> {
 
-    @Query("SELECT n FROM Note n JOIN n.users u WHERE u.userId = :userId")
-    List<Note> findAllByUserId(@Param("userId") UUID userId);
+    @Query("SELECT n FROM Note n JOIN n.users u WHERE u.id = :id")
+    List<Note> findAllByUser(@Param("id") UUID id);
 }
