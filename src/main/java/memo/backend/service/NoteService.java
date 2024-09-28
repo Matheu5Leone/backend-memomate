@@ -5,6 +5,7 @@ import memo.backend.repository.NoteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -46,5 +47,9 @@ public class NoteService {
 
     public void deleteNote(UUID noteId) {
         noteRepository.deleteById(noteId);
+    }
+
+    public List<Note> listAllByUser(UUID userId) {
+        return noteRepository.findAllByUserId(userId);
     }
 }

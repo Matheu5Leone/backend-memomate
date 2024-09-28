@@ -1,5 +1,6 @@
 package memo.backend.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -34,6 +35,7 @@ public class User {
             joinColumns = @JoinColumn(name = "user"),
             inverseJoinColumns = @JoinColumn(name = "note")
     )
+    @JsonIgnore
     private List<Note> notes = new ArrayList<>();
 
     public User(String firstName, String lastName, Date birthdate, String email, String password, byte[] avatar) {

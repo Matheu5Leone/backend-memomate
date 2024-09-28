@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -58,5 +59,11 @@ public class NoteController {
 
         noteService.deleteNote(noteId);
         return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @GetMapping("/{idUser}")
+    public ResponseEntity<List<Note>> listUserNotes(@PathVariable UUID userId){
+        List<Note> notes = noteService.listAllByUser(userId);
+        return ResponseEntity.status(HttpStatus.OK).body(notes);
     }
 }
