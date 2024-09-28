@@ -18,7 +18,7 @@ public class Note {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    public UUID noteId;
+    public UUID id;
     public String title;
     public String content;
     private LocalDateTime dataCriacao;
@@ -30,7 +30,7 @@ public class Note {
     private User owner;
 
     public Note(User owner) {
-        this.noteId = UUID.randomUUID();
+        this.id = UUID.randomUUID();
         this.title = "";
         this.content = "";
         this.dataCriacao = LocalDateTime.now();
