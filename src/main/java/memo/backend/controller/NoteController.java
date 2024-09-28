@@ -54,14 +54,14 @@ public class NoteController {
     @DeleteMapping("/{noteId}")
     public ResponseEntity<Void> deleteNote(@PathVariable UUID noteId, @RequestBody UUID userId){
         Note note = noteService.getNoteById(noteId);
-        if (!note.getOwner().getUserId().equals(userId))
+        if (!note.getOwner().getId().equals(userId))
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
 
         noteService.deleteNote(noteId);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
-    @GetMapping("/{idUser}")
+    @GetMapping("/{userId}")
     public ResponseEntity<List<Note>> listUserNotes(@PathVariable UUID userId){
         List<Note> notes = noteService.listAllByUser(userId);
         return ResponseEntity.status(HttpStatus.OK).body(notes);

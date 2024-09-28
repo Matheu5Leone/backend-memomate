@@ -20,11 +20,11 @@ public class NoteService {
     public boolean userHasAccessToNote(UUID userId, UUID noteId) {
         Note note = noteRepository.findById(noteId)
                 .orElseThrow(() -> new RuntimeException("Nota não encontrada"));
-        if (note.getOwner().getUserId().equals(userId)) {
+        if (note.getOwner().getId().equals(userId)) {
             return true;
         }
         return note.getUsers().stream()
-                .anyMatch(user -> user.getUserId().equals(userId));
+                .anyMatch(user -> user.getId().equals(userId));
     }
 
     public Note updateNoteTitle(UUID noteId, String newTitle) {

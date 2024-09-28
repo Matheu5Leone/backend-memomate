@@ -11,7 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -37,7 +36,7 @@ public class UserController {
         User user = userService.findUserByEmail(userLoginDto.getEmail());
         if (Objects.isNull(user))
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        boolean validPassword = userService.verifyPassword(user, userLoginDto.getUserPassword());
+        boolean validPassword = userService.verifyPassword(user, userLoginDto.getPassword());
         if (!validPassword)
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         return ResponseEntity.status(HttpStatus.OK).body(user);

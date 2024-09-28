@@ -19,7 +19,7 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID userId;
+    private UUID id;
     private String firstName;
     private String lastName;
     private Date birthdate;
@@ -39,7 +39,7 @@ public class User {
     private List<Note> notes = new ArrayList<>();
 
     public User(String firstName, String lastName, Date birthdate, String email, String password, byte[] avatar) {
-        this.userId = UUID.randomUUID();
+        this.id = UUID.randomUUID();
         this.firstName = firstName;
         this.lastName = lastName;
         this.birthdate = birthdate;

@@ -18,5 +18,5 @@ public class UserLoginDto {
 
     @Size(min = 8, message = "A senha deve ter no mínimo 8 caracteres")
     @NotBlank(message = "A senha é obrigatória")
-    private String userPassword;
+    private String password;
 }
