@@ -36,5 +36,7 @@ public class Note {
         this.dataCriacao = LocalDateTime.now();
         this.color = "#FFFFFF";
         this.owner = owner;
+        this.users = new ArrayList<>();
+        this.users.add(owner);
     }
 }
