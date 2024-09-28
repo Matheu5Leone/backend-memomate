@@ -36,7 +36,7 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "note")
     )
     @JsonIgnore
-    private List<Note> notes = new ArrayList<>();
+    private List<Note> notes;
 
     public User(String firstName, String lastName, Date birthdate, String email, String password, byte[] avatar) {
         this.id = UUID.randomUUID();

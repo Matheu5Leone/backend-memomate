@@ -55,30 +55,10 @@ public class NoteController {
         return ResponseEntity.status(HttpStatus.OK).body(updatedNote);
     }
 
-    @DeleteMapping("/{noteId}")
-    public ResponseEntity<Void> deleteNote(@PathVariable UUID noteId, @RequestParam UUID userId){
-        Note note = noteService.getNoteById(noteId);
-        Optional<User> optionalUser = userService.findUserById(userId);
-        List<UUID> uuid = new ArrayList();
-        uuid.add(userId);
-
-        if (optionalUser.isEmpty())
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        if (!note.getOwner().getId().equals(userId))
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-
-        noteService.deleteOrUnlinkNotesFromUser(optionalUser.get(), uuid);
+    @DeleteMapping("/{noteId}/user/{userId}")
+    public ResponseEntity<Void> deleteNote(@PathVariable UUID noteId, @PathVariable UUID userId){
+        noteService.deleteNote(noteId, userId);
         return ResponseEntity.status(HttpStatus.OK).build();
-    }
-
-    @DeleteMapping("/all/{userId}")
-    public ResponseEntity<Void> deleteNotesFromUser(@PathVariable UUID userId, @RequestBody List<UUID> notesIds){
-        Optional<User> optionalUser = userService.findUserById(userId);
-        if (optionalUser.isEmpty())
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-
-        noteService.deleteOrUnlinkNotesFromUser(optionalUser.get(), notesIds);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @GetMapping("/{userId}")
