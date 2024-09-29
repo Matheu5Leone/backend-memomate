@@ -2,6 +2,7 @@ package memo.backend.controller;
 
 import jakarta.validation.Valid;
 import memo.backend.model.User;
+import memo.backend.model.dto.UserBase64AvatarDto;
 import memo.backend.model.dto.UserLoginDto;
 import memo.backend.model.dto.UserRegisterDto;
 import memo.backend.service.UserService;
@@ -12,6 +13,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Base64;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
@@ -32,14 +34,15 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<User> login(@RequestBody @Valid UserLoginDto userLoginDto) {
+    public ResponseEntity<UserBase64AvatarDto> login(@RequestBody @Valid UserLoginDto userLoginDto) {
         User user = userService.findUserByEmail(userLoginDto.getEmail());
         if (Objects.isNull(user))
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         boolean validPassword = userService.verifyPassword(user, userLoginDto.getPassword());
         if (!validPassword)
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        return ResponseEntity.status(HttpStatus.OK).body(user);
+        UserBase64AvatarDto userBase64AvatarDto = userService.createUserBase64Dto(user);
+        return ResponseEntity.status(HttpStatus.OK).body(userBase64AvatarDto);
     }
 
     @DeleteMapping("/delete")

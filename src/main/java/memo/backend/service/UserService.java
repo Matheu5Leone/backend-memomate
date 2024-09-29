@@ -1,6 +1,7 @@
 package memo.backend.service;
 
 import memo.backend.model.User;
+import memo.backend.model.dto.UserBase64AvatarDto;
 import memo.backend.model.dto.UserRegisterDto;
 import memo.backend.repository.UserRepository;
 import memo.backend.util.ProfilePictureGenerator;
@@ -9,6 +10,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.awt.image.BufferedImage;
+import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -65,5 +67,17 @@ public class UserService {
 
     public User saveUser(User user) {
         return userRepository.save(user);
+    }
+
+    public UserBase64AvatarDto createUserBase64Dto(User user) {
+        String base64Image = Base64.getEncoder().encodeToString(user.getAvatar());
+        return new UserBase64AvatarDto(
+                user.getId(),
+                user.getFirstName(),
+                user.getLastName(),
+                user.getBirthdate(),
+                user.getEmail(),
+                base64Image
+        );
     }
 }
