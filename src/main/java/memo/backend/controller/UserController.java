@@ -2,6 +2,7 @@ package memo.backend.controller;
 
 import jakarta.validation.Valid;
 import memo.backend.model.User;
+import memo.backend.model.dto.ChangePasswordDto;
 import memo.backend.model.dto.UserBase64AvatarDto;
 import memo.backend.model.dto.UserLoginDto;
 import memo.backend.model.dto.UserRegisterDto;
@@ -12,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Base64;
 import java.util.Objects;
@@ -62,5 +64,25 @@ public class UserController {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.IMAGE_PNG);
         return ResponseEntity.status(HttpStatus.OK).headers(headers).body(optionalUser.get().getAvatar());
+    }
+
+    @PutMapping("/change-password")
+    public ResponseEntity<Void> changePassword(@RequestBody ChangePasswordDto changePasswordDto){
+        return userService.changePassword(changePasswordDto) ?
+                ResponseEntity.status(HttpStatus.OK).build() : ResponseEntity.status(HttpStatus.NOT_MODIFIED).build();
+    }
+
+    @PutMapping("/avatar/{userId}")
+    public ResponseEntity<Void> updateAvatar(@PathVariable UUID userId, @RequestParam("avatar") MultipartFile avatarFile) {
+        Optional<User> optionalUser = userService.findUserById(userId);
+        if (optionalUser.isEmpty())
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        try {
+            byte[] avatarBytes = avatarFile.getBytes();
+            userService.updateUserAvatar(userId, avatarBytes);
+            return ResponseEntity.status(HttpStatus.OK).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 }

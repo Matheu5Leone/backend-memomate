@@ -26,7 +26,7 @@ public class User {
     private String email;
     private String password;
     @Lob
-    @Column(name = "avatar", columnDefinition = "BLOB")
+    @Column(name = "avatar", columnDefinition = "MEDIUMBLOB")
     private byte[] avatar;
 
     @ManyToMany

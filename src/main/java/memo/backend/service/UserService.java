@@ -1,6 +1,7 @@
 package memo.backend.service;
 
 import memo.backend.model.User;
+import memo.backend.model.dto.ChangePasswordDto;
 import memo.backend.model.dto.UserBase64AvatarDto;
 import memo.backend.model.dto.UserRegisterDto;
 import memo.backend.repository.UserRepository;
@@ -79,5 +80,28 @@ public class UserService {
                 user.getEmail(),
                 base64Image
         );
+    }
+
+    public boolean changePassword(ChangePasswordDto changePasswordDto) {
+        if (!changePasswordDto.getNewPassword().equals(changePasswordDto.getConfirmNewPassword()))
+            return false;
+
+        return userRepository.findById(changePasswordDto.getId())
+                .filter(user -> passwordEncoder.matches(changePasswordDto.getPassword(), user.getPassword()))
+                .map(user -> {
+                    user.setPassword(passwordEncoder.encode(changePasswordDto.getNewPassword()));
+                    userRepository.save(user);
+                    return true;
+                })
+                .orElse(false);
+    }
+
+    public void updateUserAvatar(UUID userId, byte[] avatar) {
+        Optional<User> optionalUser = userRepository.findById(userId);
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+            user.setAvatar(avatar);
+            userRepository.save(user);
+        }
     }
 }
