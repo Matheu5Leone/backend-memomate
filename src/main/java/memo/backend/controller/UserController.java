@@ -33,7 +33,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(user);
     }
 
-    @PostMapping("/login")
+    @PostMapping(value = "/login", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserBase64AvatarDto> login(@RequestBody @Valid UserLoginDto userLoginDto) {
         User user = userService.findUserByEmail(userLoginDto.getEmail());
         if (Objects.isNull(user))
