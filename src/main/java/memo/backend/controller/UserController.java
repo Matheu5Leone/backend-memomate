@@ -82,7 +82,7 @@ public class UserController {
             userService.updateUserAvatar(userId, avatarBytes);
             return ResponseEntity.status(HttpStatus.OK).build();
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            return ResponseEntity.status(HttpStatus.NOT_MODIFIED).build();
         }
     }
 }
