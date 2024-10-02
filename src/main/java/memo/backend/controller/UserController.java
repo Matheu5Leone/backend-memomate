@@ -73,7 +73,7 @@ public class UserController {
     }
 
     @PutMapping("/avatar/{userId}")
-    public ResponseEntity<Void> updateAvatar(@PathVariable UUID userId, @RequestParam("avatar") MultipartFile avatarFile) {
+    public ResponseEntity<Void> updateAvatar(@PathVariable UUID userId, @RequestBody MultipartFile avatarFile) {
         Optional<User> optionalUser = userService.findUserById(userId);
         if (optionalUser.isEmpty())
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
