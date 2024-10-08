@@ -4,6 +4,7 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import memo.backend.model.Note;
 import memo.backend.model.User;
+import memo.backend.repository.NoteColorEnum;
 import memo.backend.repository.NoteRepository;
 import memo.backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,6 +49,13 @@ public class NoteService {
         Note note = noteRepository.findById(noteId)
                 .orElseThrow(() -> new RuntimeException("Nota não encontrada"));
         note.setContent(newContent);
+        return noteRepository.save(note);
+    }
+
+    public Note updateNoteColor(UUID noteId, NoteColorEnum newColor) {
+        Note note = noteRepository.findById(noteId)
+                .orElseThrow(() -> new RuntimeException("Nota não encontrada"));
+        note.setColor(newColor.getValue());
         return noteRepository.save(note);
     }
 

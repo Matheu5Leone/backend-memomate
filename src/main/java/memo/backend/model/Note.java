@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import memo.backend.repository.NoteColorEnum;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -23,7 +24,7 @@ public class Note {
     public String title;
     public String content;
     private LocalDateTime dataCriacao;
-    public String color;
+    private String color;
     @ManyToMany(mappedBy = "notes")
     private List<User> users = new ArrayList<>();
     @ManyToOne
@@ -35,7 +36,7 @@ public class Note {
         this.title = "";
         this.content = "";
         this.dataCriacao = LocalDateTime.now();
-        this.color = "#FFFFFF";
+        this.color = NoteColorEnum.DEFAULT.getValue();
         this.owner = owner;
         this.users = new ArrayList<>();
         this.users.add(owner);

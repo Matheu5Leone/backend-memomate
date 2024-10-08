@@ -3,6 +3,7 @@ package memo.backend.controller;
 import memo.backend.model.Note;
 import memo.backend.model.User;
 import memo.backend.model.dto.NewNoteDto;
+import memo.backend.repository.NoteColorEnum;
 import memo.backend.service.NoteService;
 import memo.backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,6 +53,15 @@ public class NoteController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
 
         Note updatedNote = noteService.updateNoteContent(noteId, newContent);
+        return ResponseEntity.status(HttpStatus.OK).body(updatedNote);
+    }
+
+    @PutMapping("/{noteId}/color")
+    public ResponseEntity<Note> updateNoteColor(@PathVariable UUID noteId, @RequestBody UUID userId, @RequestBody NoteColorEnum newColor) {
+        if (!noteService.userHasAccessToNote(userId, noteId))
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+
+        Note updatedNote = noteService.updateNoteColor(noteId, newColor);
         return ResponseEntity.status(HttpStatus.OK).body(updatedNote);
     }
 
